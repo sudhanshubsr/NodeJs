@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact List App</title>
+  </head>
+  <body>
+    <h1>Contact List App</h1>
+    <form action="/" method="post">
+      <input type="text" name="name" placeholder="Enter Name" />
+      <input type="number" name="phone" placeholder="Enter Number" />
+      <button type="submit">Add Contact</button>
+    </form>
+
+    <ul>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Number</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < contact_list.length; i++) { %>
+                <tr align="left">
+                    <td><%= contact_list[i].name %></td>
+                    <td><%= contact_list[i].phone %></td>
+                    <td>
+                        <a href="/deleteContact/?id=<%=contact_list[i].id %>" class="button" %>"><button>Delete</button></a>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+    
+  </body>
+</html>
