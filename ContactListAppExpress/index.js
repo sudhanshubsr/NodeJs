@@ -13,9 +13,6 @@ import ejsLayouts from 'express-ejs-layouts';
 import ContactListController from './src/controller/contactList.controller.js';
 
 import path from 'path';
-
-import db from './config/mongoose.js';
-import Contact from './src/model/contactList.model.js';
 const app = express();
 
 app.set('view engine', 'ejs');
