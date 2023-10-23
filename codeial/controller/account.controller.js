@@ -2,12 +2,19 @@ import user from "../model/users.js";
 
 export default class accountController {
   static RenderLogin(req, res) {
+    if(req.isAuthenticated()){
+     return res.redirect('/users/profile')
+    }
     return res.render("login_page", {
       title: "Login",
     });
   }
 
   static RenderSignup(req, res) {
+
+    if(req.isAuthenticated()){
+     return res.redirect('/users/profile')
+    }
     return res.render("signup_page", {
       title: "Signup",
     });
@@ -35,7 +42,12 @@ export default class accountController {
   }
 
   static async createSession(req, res) {
-    
+    return res.redirect('/users/profile');
+  }
+
+  static destroySession(req,res){
+    res.clearCookie('codeial');
+    return res.redirect('/');
   }
   
 }
