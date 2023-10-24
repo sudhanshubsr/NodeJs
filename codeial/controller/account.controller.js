@@ -42,7 +42,7 @@ export default class accountController {
   }
 
   static async createSession(req, res) {
-    return res.redirect('/users/profile');
+    return res.redirect('/');
   }
 
   static destroySession(req,res){

@@ -1,12 +1,26 @@
-
-<h1>
-    Codeials / <%= title %>
-</h1>
-
+<h1>Codeials / <%= title %></h1>
 
 <section id="feed-posts">
-    <h4>Posts</h4>
-    <form action="" id="new-post-form" method="post">
-        <textarea name="content" id="new-post-content" cols="30" rows="2" placeholder="What's on your mind?"></textarea>
-    </form>
+  <h4>Posts</h4>
+  <form action="/post/create" id="new-post-form" method="post">
+    <textarea
+      name="content"
+      id="new-post-content"
+      cols="30"
+      rows="2"
+      placeholder="What's on your mind?"></textarea>
+    <button type="submit">Post</button>
+  </form>
+
+  <div id="post-list-container">
+    <ul id="post-list">
+      <% for(let post of posts){ %>
+      <p>
+        <li><%= post.content %></li>
+        <small> <%= post.user.name %> </small>
+      </p>
+
+      <% } %>
+    </ul>
+  </div>
 </section>

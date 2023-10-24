@@ -3,6 +3,6 @@ import PostController from '../controller/post.controller.js';
 const router = express.Router();
 
 
-router.get('/posts',PostController.getPosts);
+router.post('/create',PostController.createPost);
 
 export default router;

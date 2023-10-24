@@ -1,7 +1,17 @@
+import post from "../model/post.js";
+
 export default class PostController {
 
-    static getPosts(req, res) {
-        return res.end("<h1>Here are all your Posts</h1>");
+    static createPost(req, res) {
+        if(req.user._id){
+        post.create({
+            content: req.body.content,
+            user: req.user._id
+        });}
+        else{
+            return res.redirect('back');
+        }
+        return res.redirect('back');
     }
 
-}
+}   
