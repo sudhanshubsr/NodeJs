@@ -13,7 +13,7 @@ import nodeSassMiddleware from 'node-sass-middleware';
 import flash from 'connect-flash';
 import middleware from './config/middleware.js';
 import path from 'path';
-
+import passportgoogle from './config/passport.google.oauth2.js';
 
 
 const sessionStore = new MongoStore({

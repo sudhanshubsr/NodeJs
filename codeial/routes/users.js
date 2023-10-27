@@ -23,6 +23,13 @@ router.post('/create-session', passport.authenticate(
 ), accountController.createSession)
 
 router.get('/sign-out',accountController.destroySession);
+router.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
+router.get('/auth/google/callback', passport.authenticate('google', {failureRedirect: '/users/login'}), accountController.createSession);
+
+
+
+
+
 export default router;
 
             
