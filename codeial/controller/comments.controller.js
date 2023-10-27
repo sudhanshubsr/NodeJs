@@ -1,46 +1,57 @@
 import Comment from '../model/comments.js';
 import Post from '../model/post.js';
+import CommentMailer from '../mailers/comments.mailers.js';
 
-
-export default class commentController{
-
-    static async createComment(req, res){
-
-        try{
+export default class commentController {
+    static async createComment(req, res) {
+        try {
             const post = await Post.findById(req.body.post);
-            if(post){
+            if (post) {
                 const comment = await Comment.create({
                     content: req.body.content,
                     post: post._id,
-                    user: req.user._id
+                    user: req.user._id,
                 });
                 post.comments.push(comment);
-                post.save();
-                req.flash('success','Comment Added');
-                res.redirect('back');
-            }
-        }
-        catch(err){
-            req.flash('error',err);
-            res.status(500).send('Internal Server Error');
-        }
+                await post.save();
+                
+                let CommentPopulated = await Comment.findById(comment._id).populate('user', 'name email').exec();
+                
+                CommentMailer.newComment(CommentPopulated);
 
+                if (req.xhr) {
+                    return res.status(200).json({
+                        data: {
+                            comment: comment,
+                        },
+                        message: "Comment Created!",
+                    });
+                }
+
+                req.flash('success', 'Comment Added');
+                return res.redirect('back');
+            }
+        } catch (err) {
+            console.error(err); // Log the error for debugging
+            req.flash('error', err.message); // Use err.message to set the flash message
+            return res.status(500).send('Internal Server Error');
+        }
     }
 
-    static async deleteComment(req, res){
-        try{
+    static async deleteComment(req, res) {
+        try {
             const comment = await Comment.findById(req.params.id);
-           if(comment.user == req.user.id){
-              const postId = comment.post;
-              await comment.deleteOne();
-              Post.findByIdAndUpdate(postId,{$pull:{comments: req.params.id}})
-              req.flash('success','Comment Deleted');
-              return res.redirect('back');
-           }
-        }
-        catch(err){
-            req.flash('error',err); 
-            res.status(500).send('Internal Server Error');
+            if (comment.user == req.user.id) {
+                const postId = comment.post;
+                await comment.deleteOne();
+                await Post.findByIdAndUpdate(postId, { $pull: { comments: req.params.id } });
+                req.flash('success', 'Comment Deleted');
+                return res.redirect('back');
+            }
+        } catch (err) {
+            console.error(err); // Log the error for debugging
+            req.flash('error', err.message); // Use err.message to set the flash message
+            return res.status(500).send('Internal Server Error');
         }
     }
 }
