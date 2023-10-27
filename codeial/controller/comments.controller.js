@@ -1,6 +1,9 @@
 import Comment from '../model/comments.js';
 import Post from '../model/post.js';
 import CommentMailer from '../mailers/comments.mailers.js';
+import commentEmailWorker from '../workers/comment.email.worker.js';
+import queue from '../config/kue.js';
+
 
 export default class commentController {
     static async createComment(req, res) {
@@ -16,8 +19,14 @@ export default class commentController {
                 await post.save();
                 
                 let CommentPopulated = await Comment.findById(comment._id).populate('user', 'name email').exec();
-                
-                CommentMailer.newComment(CommentPopulated);
+                let job = queue.create('emails', CommentPopulated).save((err) => {
+                    if (err) {
+                        console.log('Error in creating a job', err);
+                        return
+                    }
+                    console.log('job enqueued', job.id );
+                });
+                // CommentMailer.newComment(CommentPopulated);
 
                 if (req.xhr) {
                     return res.status(200).json({
