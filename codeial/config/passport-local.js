@@ -3,9 +3,10 @@ import passportLocal from "passport-local";
 import User from "../model/users.js";
 
 passport.use(new passportLocal.Strategy({
-    usernameField: 'email'
+    usernameField: 'email',
+    passReqToCallback: true // ! To pass the request to the callback function
     },
-    function(email, password, done) {
+    function(req,email, password, done) {
         // Find a user and establish the identity
         // If not found or password is wrong then return done(null, false)
         // If found then return done(null, user)
@@ -13,13 +14,14 @@ passport.use(new passportLocal.Strategy({
         User.findOne({ email: email })
             .then((user) => {
                 if (!user || user.password !== password) {
-                    return done(null, false, { message: 'Incorrect email or password' });
+                    req.flash('error', 'Invalid Username/Password');
+                    return done(null, false);
                 } else {
                     return done(null, user);
                 }
             })
             .catch((err) => {
-                console.log('Error in finding user --> Passport');
+                req.flash('error', err);
                 return done(err);
             });
     }
@@ -47,7 +49,7 @@ passport.deserializeUser(function(id, done) {
 
 
 passport.checkAuthentication = (req,res,next)=>{
-    // ! IF the user is signed in, then pass on teh request to the next function(controller's action)
+    // ! IF the user is signed in, then pass on the request to the next function(controller's action)
     if(req.isAuthenticated()){
         return next();
     }

@@ -1,0 +1,32 @@
+<section id="feed-posts">
+  <h4>Posts</h4>
+  <form action="/post/create" id="new-post-form" method="post">
+    <textarea
+      name="content"
+      id="new-post-content"
+      cols="30"
+      rows="2"
+      value=""
+      placeholder="What's on your mind?"></textarea>
+    <button class="post-create-button" type="submit">Post</button>
+  </form>
+  <% if(locals.user) { %>
+  <div id="post-list-container">
+    <ul id="post-list">
+      <% for(let post of posts) { %>
+        <li id="post-<%=post._id %>">
+          <%= post.content %>
+          <br>
+          <small><%= post.user.name %></small>
+          <% if(locals.user && locals.user.id == post.user.id) { %>
+            <small>
+              <a class="post-delete-button" href="/post/delete/<%= post.id %>">Delete Post</a>
+            </small>
+          <% } %>
+        </li>
+        <%- include("./_comments.ejs", { post: post }) %>
+      <% } %>
+    </ul>
+  </div>
+  <% } %>
+</section>

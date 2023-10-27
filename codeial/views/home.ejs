@@ -1,26 +1,19 @@
 <h1>Codeials / <%= title %></h1>
 
-<section id="feed-posts">
-  <h4>Posts</h4>
-  <form action="/post/create" id="new-post-form" method="post">
-    <textarea
-      name="content"
-      id="new-post-content"
-      cols="30"
-      rows="2"
-      placeholder="What's on your mind?"></textarea>
-    <button type="submit">Post</button>
-  </form>
 
-  <div id="post-list-container">
-    <ul id="post-list">
-      <% for(let post of posts){ %>
-      <p>
-        <li><%= post.content %></li>
-        <small> <%= post.user.name %> </small>
-      </p>
 
-      <% } %>
-    </ul>
-  </div>
+<%- include("./_posts.ejs") %>
+
+
+<section id="user-friends">
+  <h4>Friends</h4>
+  <% for(u of all_users) { %>
+    <div class="user-friend">
+      <a href="/users/profile/<%= u.id %>">
+        <p><%= u.name %></p>
+      </a>
+    </div>
+  <% } %>
 </section>
+
+<script src = "/assets/js/home.posts.ajax.js"></script>

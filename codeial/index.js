@@ -5,10 +5,16 @@ import cookieParser from 'cookie-parser';
 import db from './config/mongoose.js';
 import session from 'express-session';
 import passport from 'passport';
-// import passportLocal from './config/passport-local.js';
+ import passportLocal from './config/passport-local.js';
+ import passportJWT from './config/passport-jwt.js';
 const app = express();
 import MongoStore from 'connect-mongo';
 import nodeSassMiddleware from 'node-sass-middleware';
+import flash from 'connect-flash';
+import middleware from './config/middleware.js';
+import path from 'path';
+
+
 
 const sessionStore = new MongoStore({
     mongoUrl: 'mongodb://localhost:27017/codeial_db',
@@ -43,8 +49,8 @@ app.use('/assets',express.static('./assets'));
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
 
-
-
+//? make the uploads path available to the browser
+app.use('/uploads',express.static("./uploads"));
 
 //? Use EJS Layouts
 app.use(expressEjsLayouts);
@@ -71,10 +77,18 @@ app.use(session({
         maxAge: (1000*60*100)
     }
 }));
+
+// Initialize connect-flash middleware
+
+
+// ? Initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(passport.setAuthenticatedUser);
+
+app.use(flash());
+app.use(middleware.setFlash);
 
 // ? Use Express router
 app.use('/', router);

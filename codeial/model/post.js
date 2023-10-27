@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
     content:{
@@ -8,8 +8,14 @@ const postSchema = new mongoose.Schema({
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
-    },},
-    {timestamps: true});
+    },
+    comments:[
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }
+]
+},{timestamps: true});
 
     const post = mongoose.model('post', postSchema);
     export default post;

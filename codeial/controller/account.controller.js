@@ -22,6 +22,7 @@ export default class accountController {
 
   static async create(req, res) {
     if (req.body.password !== req.body.confirm_password) {
+      req.flash('error','Passwords do not match');
       return res.redirect('back');
     }
   
@@ -30,24 +31,35 @@ export default class accountController {
       
       if (!existingUser) {
         user.create(req.body);
+        req.flash('success','Account Created Successfully');
         return res.redirect('/users/login');
 
       } else {
+        req.flash('error','Email already registered');
         return res.redirect('back');
       }
     } catch (err) {
-      console.log('Error in signing up:', err);
+      req.flash('error',err);
       return res.status(500).send('Internal Server Error');
     }
   }
 
   static async createSession(req, res) {
+    req.flash('success','Logged in Successfully');
     return res.redirect('/');
   }
 
-  static destroySession(req,res){
-    res.clearCookie('codeial');
-    return res.redirect('/');
-  }
+    static destroySession(req,res){
+      req.logout((err)=>{
+        if(err){
+        console.log('Error in destroying session',err);
+        }else{
+          req.flash('success','Logged out Successfully')
+          return res.redirect('/');
+        }
+      });
+      
+
+    }
   
 }

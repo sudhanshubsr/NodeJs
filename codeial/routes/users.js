@@ -7,7 +7,8 @@ import passportLocal from '../config/passport-local.js';
 
 const router = express.Router();
 
-router.get('/profile',passport.checkAuthentication, userController.profile);
+router.get('/profile/:id',passport.checkAuthentication, userController.profile);
+router.post('/update/:id',passport.checkAuthentication, userController.profileUpdate);
 router.get('/login',accountController.RenderLogin);
 router.get('/signup',accountController.RenderSignup);
 
