@@ -17,9 +17,16 @@ import passportgoogle from './config/passport.google.oauth2.js';
 
 import {createServer} from 'node:http';
 import { chatSockets } from './config/chats_socket.js';
-import {development} from './config/enviornment.js';
+import env from './config/enviornment.js';
+
+
+import logger from 'morgan';
 
 const app = express();
+
+// import viewhelper from './config/view.helpers.js';
+// viewhelper(app);
+
 export const chatServer = createServer(app);
 chatSockets(chatServer);
 
@@ -59,10 +66,13 @@ app.set('layout extractScripts', true);
 
 
 //? using static files
-app.use('/assets',express.static(development.asset_path));
+app.use('/assets',express.static(env.asset_path));
 
 //? make the uploads path available to the browser
 app.use('/uploads',express.static("./uploads"));
+
+app.use(logger(env.morgan.mode, env.morgan.options));
+
 
 //? Use EJS Layouts
 app.use(expressEjsLayouts);
@@ -81,7 +91,7 @@ app.set('views', './views');
 app.use(session({
     name: 'codeial',
     // TODO change the secret before deployement 
-    secret: 'blahsomething',
+    secret: env.session_cookie_key,
     saveUninitialized: false,
     resave: false,
     store: sessionStore,

@@ -1,6 +1,6 @@
 import User from "../../../model/users.js";
 import  jwt from "jsonwebtoken";
-
+import env from "../../../config/enviornment.js";
 
 export default class userAPI{
     static async create(req,res){
@@ -16,7 +16,7 @@ export default class userAPI{
             return res.status(200).json({
                 message: "Sign in successful, here is your token, please keep it safe",
                 data: {
-                    token: jwt.sign(user.toJSON(), 'codeial', {expiresIn: '100000'})
+                    token: jwt.sign(user.toJSON(), env.jwt_secret, {expiresIn: '100000'})
                     // ? here we are converting the user object into JSON and then signing it with the secret key"codeial" and then setting the expiry time of the token to 100000
                 }
             })

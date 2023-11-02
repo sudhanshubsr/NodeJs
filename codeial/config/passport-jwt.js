@@ -3,11 +3,11 @@ import passport from 'passport';
 import JWTStrategy from 'passport-jwt';
 import ExtractJwt from 'passport-jwt';
 import User from '../model/users.js';
-
+import env from './enviornment.js';
 
 let opts = {
     jwtFromRequest: ExtractJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'codeial'
+    secretOrKey: env.jwt_secret,
 }
 
 

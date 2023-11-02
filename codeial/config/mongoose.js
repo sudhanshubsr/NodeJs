@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import env from "./enviornment.js";
 
-mongoose.connect('mongodb://localhost:27017/codeial_db');
+mongoose.connect(`mongodb://localhost:27017/${env.db}`);
 
 
 const db = mongoose.connection;
