@@ -1,6 +1,7 @@
 import post from "../model/post.js";
 import flash from 'connect-flash';
 import Comment from "../model/comments.js";
+import Like from "../model/likes.model.js";
 
 export default class PostController {
 
@@ -42,6 +43,10 @@ export default class PostController {
         }
         //? .id means converting the object id into string
         if(Post.user == req.user.id){
+            
+            await Like.deleteMany({likeable: Post, onModel: 'Post'});
+            await Like.deleteMany({_id: {$in: Post.comments}});
+
             await Post.deleteOne();
             await Comment.deleteMany({post: req.params.id});
             if(req.xhr){

@@ -7,14 +7,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="/layout.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d7c0d16314.js" crossorigin="anonymous"></script>
+
+    <!-- 
+    ! The issue was here when linking css to it, I was adding two ".." in the path, which i should haven not.
+    ! Also it will not work if we add the css file in the ejs file, we have to add it in the layout.ejs file.
+    ! For future debugging, make sure you are rendering static files from the layout.ejs file and correct path is used in index.js file.
+    -->
+    <link rel="stylesheet" href="/assets/css/chatbox.css"> 
+
+    <link rel="stylesheet" href="/assets/css/layout.css"> 
+    <link rel="stylesheet" href="/assets/css/user_login_page.css"/>
+    <link rel="stylesheet" href="/assets/css/user_signup_page.css"/>
+    <link rel="stylesheet" href="/assets/css/posts.css">
+    <link rel="stylesheet" href="/assets/css/user_profile.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/home.css">
+    <link rel="stylesheet" href="/assets/css/comments.css">
     <style><%- style %></style>
 </head>
 <body>
     <%- include('./_header.ejs') %>
     <%- body %>
-    
+    <%- include('./_chatbox.ejs') %>
     <%- script %>
     <script>
         <% if(flash.success && flash.success.length > 0) { %>
@@ -36,7 +52,11 @@
                 timeout: 1500
             }).show();
         <% } %>
+
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
 </body>
 </html>

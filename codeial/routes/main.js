@@ -6,13 +6,13 @@ import postRouter from './posts.js'
 import commentRouter from './comments.js'
 const router = express.Router();
 import api from './api/index.js';
-
+import likesrouter from './likes.routes.js'
 
 router.get('/', AppController.RenderHome);
 router.use('/users', usersRouter);
 router.use('/post', postRouter);
 router.use('/comments',commentRouter);
-
+router.use('/likes',likesrouter);
 
 router.use('/api', api);
 

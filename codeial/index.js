@@ -7,13 +7,22 @@ import session from 'express-session';
 import passport from 'passport';
  import passportLocal from './config/passport-local.js';
  import passportJWT from './config/passport-jwt.js';
-const app = express();
+
 import MongoStore from 'connect-mongo';
 import nodeSassMiddleware from 'node-sass-middleware';
 import flash from 'connect-flash';
 import middleware from './config/middleware.js';
 import path from 'path';
 import passportgoogle from './config/passport.google.oauth2.js';
+
+import {createServer} from 'node:http';
+import { chatSockets } from './config/chats_socket.js';
+import {development} from './config/enviornment.js';
+
+const app = express();
+export const chatServer = createServer(app);
+chatSockets(chatServer);
+
 
 
 const sessionStore = new MongoStore({
@@ -42,12 +51,15 @@ app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
 
-//? using static files
-app.use('/assets',express.static('./assets'));
+
 
 // ? extracting styles and scripts from sub pages into the layout
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
+
+
+//? using static files
+app.use('/assets',express.static(development.asset_path));
 
 //? make the uploads path available to the browser
 app.use('/uploads',express.static("./uploads"));

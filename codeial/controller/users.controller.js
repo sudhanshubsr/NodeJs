@@ -6,7 +6,7 @@ export default class userController {
   static profile(req, res) {
   user.findById(req.params.id)
       .then((user) => {
-        console.log(user);
+        // console.log(user);
         return res.render("user_profile", {
           title: "Profile",
           profile_user: user

@@ -1,5 +1,7 @@
 import post from "../model/post.js";
 import user from "../model/users.js";
+
+
 export  default class AppController {
     static RenderHome(req, res) {
         post.find({})
@@ -9,8 +11,13 @@ export  default class AppController {
                 path: 'comments',
                 populate: {
                     path: 'user'
+                },
+                populate:{
+                    path: 'likes'
                 }
-            })
+
+            }).populate('likes')
+            .populate('comments')
             .then(posts => {
                 user.find({})
                 .then(users=>{

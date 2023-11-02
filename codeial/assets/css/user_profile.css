@@ -1,5 +1,10 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: pink; }
+#profile_page_avatar {
+  height: 200px;
+  width: 200px;
+}
+
+
+
+h1 {
+  color: red;
+}

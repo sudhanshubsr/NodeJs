@@ -3,7 +3,7 @@ import Post from '../model/post.js';
 import CommentMailer from '../mailers/comments.mailers.js';
 import commentEmailWorker from '../workers/comment.email.worker.js';
 import queue from '../config/kue.js';
-
+import Like from '../model/likes.model.js';
 
 export default class commentController {
     static async createComment(req, res) {
@@ -54,7 +54,21 @@ export default class commentController {
                 const postId = comment.post;
                 await comment.deleteOne();
                 await Post.findByIdAndUpdate(postId, { $pull: { comments: req.params.id } });
+
+                await Like.deleteMany({likeable: comment._id, onModel: 'Comment'});
+                if(req.xhr){
+                    return res.status(200).json({
+                        data:{
+                            comment_id: req.params.id
+                        },
+                        message: "Comment deleted"
+                    }); 
+                }
+
                 req.flash('success', 'Comment Deleted');
+                return res.redirect('back');
+            }else{
+                req.flash('error', 'Unauthorized');
                 return res.redirect('back');
             }
         } catch (err) {
